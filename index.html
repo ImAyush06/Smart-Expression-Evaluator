@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Expression Evaluator</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">Σ</div>
+                <div class="logo-text">Smart Evaluator</div>
+            </div>
+            
+            <nav class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" data-tab="calculator">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
+                        <span>Calculator</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-tab="history">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-tab="help">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        <span>Help</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-tab="settings">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </nav>
+            
+            <div class="sidebar-footer">
+                Smart Evaluator v1.0
+            </div>
+        </aside>
+        
+        <!-- Main Dashboard View Panels -->
+        <main class="main-content">
+            <button id="sidebar-toggle" class="toggle-btn" title="Toggle Sidebar">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+            
+            <!-- Tab: Calculator -->
+            <section id="tab-calculator" class="tab-view active">
+                <div class="view-header">
+                    <h1 class="view-title">Smart Calculator</h1>
+                    <p class="view-subtitle">Enter mathematical expressions or click buttons to compute infix expressions using Stack DSA.</p>
+                </div>
+                
+                <div class="calculator-grid">
+                    <!-- Left: Calculator Pad and Display -->
+                    <div class="glass-card">
+                        <!-- Calculator Screen Display -->
+                        <div class="display-wrapper">
+                            <span class="display-label">Expression Display</span>
+                            <input type="text" id="calc-input" class="input-box" placeholder="0" autocomplete="off" autofocus>
+                            <div class="outputs-container">
+                                <div class="output-row">
+                                    <span class="label">Original:</span>
+                                    <span id="output-original" class="val">-</span>
+                                </div>
+                                <div class="output-row">
+                                    <span class="label">Postfix:</span>
+                                    <span id="output-postfix" class="val">-</span>
+                                </div>
+                                <div class="output-row result">
+                                    <span class="label">Result:</span>
+                                    <span id="output-result" class="val">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Buttons Row (Scientific) -->
+                        <div class="keypad-scientific">
+                            <button class="calc-btn sci-btn" data-val="sqrt(">sqrt()</button>
+                            <button class="calc-btn sci-btn" data-val="factorial(">fact()</button>
+                            <button class="calc-btn sci-btn" data-val="percentage(">perc()</button>
+                        </div>
+                        
+                        <!-- Buttons Row (Standard grid) -->
+                        <div class="keypad">
+                            <button class="calc-btn action-btn" id="btn-clear">C</button>
+                            <button class="calc-btn op-btn" data-val="(">(</button>
+                            <button class="calc-btn op-btn" data-val=")">)</button>
+                            <button class="calc-btn op-btn" data-val="^">^</button>
+                            
+                            <button class="calc-btn" data-val="7">7</button>
+                            <button class="calc-btn" data-val="8">8</button>
+                            <button class="calc-btn" data-val="9">9</button>
+                            <button class="calc-btn op-btn" data-val="/">/</button>
+                            
+                            <button class="calc-btn" data-val="4">4</button>
+                            <button class="calc-btn" data-val="5">5</button>
+                            <button class="calc-btn" data-val="6">6</button>
+                            <button class="calc-btn op-btn" data-val="*">*</button>
+                            
+                            <button class="calc-btn" data-val="1">1</button>
+                            <button class="calc-btn" data-val="2">2</button>
+                            <button class="calc-btn" data-val="3">3</button>
+                            <button class="calc-btn op-btn" data-val="-">-</button>
+                            
+                            <button class="calc-btn" data-val="0">0</button>
+                            <button class="calc-btn" data-val=".">.</button>
+                            <button class="calc-btn op-btn" data-val="%">%</button>
+                            <button class="calc-btn op-btn" data-val="+">+</button>
+                            
+                            <button class="calc-btn action-btn" id="btn-back" style="grid-column: span 1;" title="Backspace">⌫</button>
+                            <button class="calc-btn btn" id="btn-copy" style="grid-column: span 1;" title="Copy Result">Copy</button>
+                            <button class="calc-btn primary-btn" id="btn-evaluate" style="grid-column: span 2;">Convert & Evaluate</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Quick Recent History -->
+                    <div class="glass-card recent-history-card">
+                        <div class="side-panel-title">
+                            <span>Recent Calculations</span>
+                            <span id="quick-history-badge" class="badge">0</span>
+                        </div>
+                        <div id="quick-history-list" class="mini-list">
+                            <div class="empty-state">No calculations yet. Let's calculate!</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+
+            
+            <!-- Tab: History -->
+            <section id="tab-history" class="tab-view">
+                <div class="view-header">
+                    <h1 class="view-title">Calculation History</h1>
+                    <p class="view-subtitle">Inspect past expression results, search logs instantly, or sort items.</p>
+                </div>
+                
+                <!-- History Controls -->
+                <div class="glass-card history-controls">
+                    <div class="search-bar-wrapper">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="history-search" class="search-input" placeholder="Search by expression, answer, date, or operator (e.g. sqrt, 25, *)...">
+                    </div>
+                    
+                    <div class="ctrl-btn-group">
+                        <button id="btn-toggle-sort" class="btn">Sort: Newest First</button>
+                        <button id="btn-delete-selected" class="btn danger">Delete Selected</button>
+                        <button id="btn-delete-all" class="btn danger">Delete All</button>
+                    </div>
+                </div>
+                
+                <!-- History Table / Cards -->
+                <div class="glass-card" style="flex-grow: 1;">
+                    <div style="margin-bottom: 1rem; display:flex; align-items:center; gap: 0.5rem;">
+                        <input type="checkbox" id="history-select-all" class="record-checkbox">
+                        <label for="history-select-all" style="font-size:0.85rem; color:var(--text-secondary); cursor:pointer; user-select:none;">Select All</label>
+                    </div>
+                    <div id="history-records-container" class="records-list">
+                        <!-- Loaded dynamically -->
+                        <div class="empty-state">No calculations found matching criteria.</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tab: Help -->
+            <section id="tab-help" class="tab-view">
+                <div class="view-header">
+                    <h1 class="view-title">User Manual & Help Center</h1>
+                    <p class="view-subtitle">Learn about operator precedence, recursive factorials, and variable operations.</p>
+                </div>
+                
+                <div class="glass-card help-grid">
+                    <div>
+                        <h3 class="help-section-title">Supported Operators</h3>
+                        <ul class="help-list">
+                            <li><span class="code-term">+</span> <span>Addition (e.g. 5 + 3 = 8)</span></li>
+                            <li><span class="code-term">-</span> <span>Subtraction (e.g. 10 - 4 = 6)</span></li>
+                            <li><span class="code-term">*</span> <span>Multiplication (e.g. 6 * 4 = 24)</span></li>
+                            <li><span class="code-term">/</span> <span>Division (e.g. 15 / 3 = 5, checks for zero-division)</span></li>
+                            <li><span class="code-term">%</span> <span>Modulo (remainder) (e.g. 10 % 3 = 1)</span></li>
+                            <li><span class="code-term">^</span> <span>Exponentiation (e.g. 2 ^ 3 = 8)</span></li>
+                            <li><span class="code-term">( )</span> <span>Parentheses to group calculations and force priority</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="help-section-title">Special Functions</h3>
+                        <ul class="help-list">
+                            <li><span class="code-term">sqrt(x)</span> <span>Computes square root of x (e.g., sqrt(16) = 4)</span></li>
+                            <li><span class="code-term">factorial(x)</span> <span>Recursive evaluation (e.g., factorial(5) = 120, max input is 20)</span></li>
+                            <li><span class="code-term">percentage(x)</span> <span>Divides x by 100 (e.g., percentage(25) = 0.25)</span></li>
+                            <li><span class="code-term">pi, e</span> <span>Built-in constants (pi = 3.14159, e = 2.71828)</span></li>
+                        </ul>
+                        <h3 class="help-section-title" style="margin-top: 1.5rem;">History</h3>
+                        <p style="font-size:0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                            - Every calculation is saved to browser storage. You can check the details (including infix, postfix stack outputs, ID, and dates) in the **History** tab.<br>
+                            - Search results refresh instantly as you type operators (e.g. <code>*</code>), keywords, or dates.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tab: Settings -->
+            <section id="tab-settings" class="tab-view">
+                <div class="view-header">
+                    <h1 class="view-title">Settings & Customization</h1>
+                    <p class="view-subtitle">Customize visual themes or reset state memory.</p>
+                </div>
+                
+                <div class="glass-card" style="max-width: 600px;">
+                    <div class="settings-option">
+                        <div class="settings-info">
+                            <h4>Visual Theme</h4>
+                            <p>Toggle between premium color schemes</p>
+                        </div>
+                        <div class="theme-selector">
+                            <button class="theme-btn dark-blue active" data-theme="default" title="Glassmorphic Dark"></button>
+                            <button class="theme-btn cyan" data-theme="cyberpunk" title="Cyberpunk Cyan"></button>
+                            <button class="theme-btn gold" data-theme="royal" title="Royal Gold"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div class="settings-info">
+                            <h4>Clear Local Memory</h4>
+                            <p>Wipe all calculation history from local memory</p>
+                        </div>
+                        <button id="btn-wipe-data" class="btn danger">Reset Storage</button>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div class="settings-info">
+                            <h4>WebAssembly Status</h4>
+                            <p>Displays compiler engine runtime state</p>
+                        </div>
+                        <span id="wasm-status-badge" style="color:var(--error); font-weight:600; font-size:0.9rem;">Initializing...</span>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+    
+    <!-- Modal: Confirmation Dialog -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal">
+            <h3 class="modal-title" id="confirm-title">Are you sure?</h3>
+            <p class="modal-desc" id="confirm-desc">This action cannot be undone.</p>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="confirm-btn-cancel">Cancel</button>
+                <button type="button" class="btn danger" id="confirm-btn-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
